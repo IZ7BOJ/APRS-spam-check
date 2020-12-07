@@ -3,10 +3,10 @@
 #******************************************************************************************
 #This script periodically checks the aprx log file in order to identify stations that make channel flooding
 #Flowchart:
-#1. create a vector of stations received in the last "cycletime"
-#2. for every station in vector, find the timestamp of last heard packet and last-10 heard packet. If there aren't 10 packets, consider the oldest packet.
-#3. calculate the average time between last 10 packets
-#4. if the average time between packet is < threshold, send a telegram notification for possible spamming.
+#1. create a dictionary of stations received in the last "cycletime"
+#2. for every station in dictionary, counts the heard beacons (excluding digipeated ones)
+#3. calculate the average rate
+#4. if the rate is > ratelimit, send a telegram notification for possible spamming.
 #The script shall be executed by crond every "cycletime"
 #
 #IMPORTANT: before using this script, intall and configure the library "telegram-send ( https://pypi.org/project/telegram-send/ ) and configure the destination of the $
