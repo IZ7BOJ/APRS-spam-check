@@ -42,22 +42,23 @@ lastcall=""
 lasttime=""
 
 for line in log:
-        if interface+" R" in line or interface+" d" in line: #if it's received by radio
+        if interface in line and (" R" in line[0:37] or " d" in line[0:37]): #if it's received by radio
                 timestamp=line[0:19] #take only the part of the line, where date and time is
+#               timestamp=datetime.strptime(timestamp,"%Y-%m-%d %H:%M:%S")-timedelta(seconds=time.timezone) #capire perche' aggiunge solo 1h
                 timestamp=datetime.strptime(timestamp,"%Y-%m-%d %H:%M:%S")
                 if timestamp>=(datetime.utcnow()-timedelta(seconds=cycletime)): #if it's received within cycletime
-                        if interface+" R" in line:
+                        if interface in line[0:37] and " R" in line[0:37]:
                                 stationcall=line[36:line.find('>')] #extract station call for "R" stations
                         else:
                                 stationcall=line[37:line.find('>')]
                         if stationcall not in receivedstations: #if this callsign is not in dictionary, add it
                                 receivedstations[stationcall]=1
                         else:
-                                if (timestamp-lasttime<=timedelta(seconds=10) and stationcall != lastcall) or timestamp-lasttime>=timedelta(seconds=10) :
+                                if (timestamp-lasttime<=timedelta(seconds=10) and stationcall != lastcall) or timestamp-lasttime>=timedelta(seconds=10) : #don't consider digipeated packets
                                         receivedstations[stationcall]+=1 #otherwise increment counter
-
                         lasttime=timestamp
                         lastcall=stationcall
+
 for station in receivedstations:
         if receivedstations[station]>=ratelimit:
                 message="WARNING: Station "+station+" is transmitting at high rate ("+str(receivedstations[station]/float(cycletime)*60.0)+" beacons/min). Possible Flo$
