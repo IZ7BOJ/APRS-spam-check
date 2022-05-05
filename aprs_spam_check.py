@@ -47,10 +47,10 @@ for line in log:
 #               timestamp=datetime.strptime(timestamp,"%Y-%m-%d %H:%M:%S")-timedelta(seconds=time.timezone) #capire perche' aggiunge solo 1h
                 timestamp=datetime.strptime(timestamp,"%Y-%m-%d %H:%M:%S")
                 if timestamp>=(datetime.utcnow()-timedelta(seconds=cycletime)): #if it's received within cycletime
-                        if interface in line[0:37] and " R" in line[0:37]:
-                                stationcall=line[36:line.find('>')] #extract station call for "R" stations
+                        if " d *" in line[0:37]:
+                                stationcall=line[37:line.find('>')] #extract station call for "d" stations and cut "*"
                         else:
-                                stationcall=line[37:line.find('>')]
+                                stationcall=line[36:line.find('>')]
                         if stationcall not in receivedstations: #if this callsign is not in dictionary, add it
                                 receivedstations[stationcall]=1
                         else:
