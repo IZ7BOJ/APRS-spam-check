@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 #******************************************************************************************
 #This script periodically checks the aprx log file in order to identify stations that make channel flooding
@@ -61,6 +61,6 @@ for line in log:
 
 for station in receivedstations:
         if receivedstations[station]>=ratelimit:
-                message="WARNING: Station "+station+" is transmitting at high rate ("+str(receivedstations[station]/float(cycletime)*60.0)+" beacons/min). Possible Flo$
+                message="WARNING: Station "+station+" is transmitting at high rate ("+str(round(receivedstations[station]/float(cycletime)*60.0,1))+" beacons/min). Possible Flooding!"
                 telegram_send.send(messages=[message], conf=telegram_conf_file)
                 time.sleep(2)
