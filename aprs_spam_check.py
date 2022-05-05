@@ -54,7 +54,7 @@ for line in log:
                         if stationcall not in receivedstations: #if this callsign is not in dictionary, add it
                                 receivedstations[stationcall]=1
                         else:
-                                if (timestamp-lasttime<=timedelta(seconds=10) and stationcall != lastcall) or timestamp-lasttime>=timedelta(seconds=10) : #don't consider digipeated packets
+                                if stationcall != lastcall or timestamp-lasttime>=timedelta(seconds=10): #if it's not a digipeated packet
                                         receivedstations[stationcall]+=1 #otherwise increment counter
                         lasttime=timestamp
                         lastcall=stationcall
